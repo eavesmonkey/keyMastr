@@ -1,0 +1,14 @@
+{
+  "gmail":{
+    "length": 10,
+    "symbols": true
+  },
+  "facebook":{
+    "length": 10,
+    "symbols": true
+  },
+  "paypal":{
+    "length": 10,
+    "symbols": true
+  }
+}
