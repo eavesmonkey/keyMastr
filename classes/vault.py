@@ -25,4 +25,12 @@ class Vault:
         accounts = self.getAllAccounts()
         if name not in accounts:
             accounts[name]={'length': length, 'symbols': hasSymbols}
-            open(self.accountFile, 'w').write(json.dumps(accounts))
+            self.saveFile(accounts)
+
+    def deleteAccount(self, name):
+        accounts = self.getAllAccounts()
+        del accounts[name]
+        self.saveFile(accounts)
+
+    def saveFile(self, content):
+        open(self.accountFile, 'w').write(json.dumps(content))
