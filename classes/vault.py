@@ -23,9 +23,9 @@ class Vault:
 
     def addAccount(self, name, length=10, hasSymbols=True):
         accounts = self.getAllAccounts()
-        if name not in accounts:
-            accounts[name]={'length': length, 'symbols': hasSymbols}
-            self.saveFile(accounts)
+        accounts[name]={'length': length, 'symbols': hasSymbols}
+        self.saveFile(accounts)
+
 
     def deleteAccount(self, name):
         accounts = self.getAllAccounts()
