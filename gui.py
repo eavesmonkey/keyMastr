@@ -30,11 +30,15 @@ win.configure(background='#282C34', padx="20", pady="20")
 
 # vars
 accountName = tk.StringVar()
+editAccountName = tk.StringVar()
+editPasswordSize = tk.StringVar()
 masterPassword = tk.StringVar()
 passwordSize = tk.IntVar()
 passwordSize.set(10)
 hasSymbols = tk.BooleanVar()
 hasSymbols.set(True)
+editHasSymbols = tk.BooleanVar()
+item = ''
 
 # Initiate vault
 vault = classes.vault.Vault()
@@ -54,33 +58,42 @@ def addAccount():
 
 def getPassword(masterPass, account):
     vault.getAccounPassword(masterPass,account)
+    messagebox.showinfo("Password copied", "Password copied to clipboard")
 
 def deleteAccount():
     vault.deleteAccount(accountName.get())
     treeview.delete(treeview.selection()[0])
 
 def updateAccount():
-    accountName.set(treeview.item(item,"text"), accountName.get())
+    global item
+    treeview.item(item, text=editAccountName.get())
+    treeview.item(item, value=editPasswordSize.get()[0])
+    treeview.item(item, variable=editHasSymbols, value=True)
 
 def editAccount():
     editPopup = tk.Toplevel()
-
     editPopup.wm_title("Window")
     editPopup.configure(background='#282C34', padx="20", pady="20")
     ttk.Label(editPopup, text="Account name").grid(column=0, row=0, sticky="w")
-    ttk.Entry(editPopup, width=12, textvariable=accountName).grid(column=0, row=1)
+    ttk.Entry(editPopup, width=12, textvariable=editAccountName).grid(column=0, row=1)
     ttk.Label(editPopup, text="Password size").grid(column=1, row=0, sticky="w")
-    ttk.Entry(editPopup, width=12, textvariable=passwordSize).grid(column=1, row=1)
+    ttk.Entry(editPopup, width=12, textvariable=editPasswordSize).grid(column=1, row=1)
     ttk.Label(editPopup, text="Allow symbols?").grid(column=2, row=0, columnspan=2, sticky="w")
-    ttk.Radiobutton(editPopup, text="Yes", variable=hasSymbols, value=True).grid(column=2, row=1)
-    ttk.Radiobutton(editPopup, text="No", variable=hasSymbols, value=False).grid(column=3, row=1)
+    ttk.Radiobutton(editPopup, text="Yes", variable=editHasSymbols, value=True).grid(column=2, row=1)
+    ttk.Radiobutton(editPopup, text="No", variable=editHasSymbols, value=False).grid(column=3, row=1)
     ttk.Button(editPopup, text="Update", command=updateAccount, style='green/black.TButton').grid(column=0, row=2)
 
 def selectItem(event):
+    global item
     item = treeview.identify('item',event.x,event.y)
+    selectedItem = treeview.item(item,"text")
+
     passwordSize.set(treeview.item(item, "values")[0])
     hasSymbols.set(treeview.item(item, "values")[1])
     accountName.set(treeview.item(item,"text"))
+    editAccountName.set(treeview.item(item,"text"))
+    editPasswordSize.set(treeview.item(item,"values")[0])
+    editHasSymbols.set(treeview.item(item,"values")[1]) #use **kwargs
     print('select item ' + str(accountName))
 
 def popup(event):
